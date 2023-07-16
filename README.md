@@ -30,10 +30,10 @@ Python / Django небольшой сервис отправки имейл ра
         EMAIL_USE_TLS=True
         ELSEVIER_API_KEY=api_key
 5. Проведите миграции 
-6. Запустите в разных терминалах:
--redis-server
--celery -A mailganer worker -l info
--celery -A mailganer beat
+6. Запустите в разных терминалах:<br>
+-redis-server<br>
+-celery -A mailganer worker -l info<br>
+-celery -A mailganer beat<br>
 
 5. Программа будет рассылать неотправленные письма каждые 10с
 
