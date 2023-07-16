@@ -1,0 +1,81 @@
+{% extends 'app/base.html' %}
+
+{% block title %}
+Список подписчиков
+{% endblock %}
+
+{% block content %}
+<h1>Рассылки</h1>
+    <!-- Кнопка-триггер модального окна -->
+<button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
+  Добавить рассылку
+</button>
+
+<!-- Модальное окно -->
+<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Рассылка</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Закрыть"></button>
+      </div>
+      <div class="modal-body">
+
+          <h3>Добавление рассылки</h3>
+          <h5 id="h5" style="color: crimson"></h5>
+
+<form method="post" id="post-form">
+    {% csrf_token %}
+    {{ mailingform.subscriber}}<br>
+    {{ mailingform.letter }}<br>
+    {{ mailingform.send_date }}<br>
+
+{#    <input type="email" placeholder="Введите email" class="form-control">#}
+{#    <input type="text" placeholder="Введите Имя" class="form-control">#}
+{#    <input type="text" placeholder="Введите Фамилию" class="form-control">#}
+{#    <input type="date"  class="form-control">#}
+    <span> {{ error }} </span>
+    <button type="submit" class="btn btn-success">Добавить</button>
+
+
+
+
+</form>
+  </div>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+        <script>
+        $(document).on('submit', '#post-form', function (e) {
+    e.preventDefault();
+    $.ajax({
+        type: 'POST',
+        url: '/validate_mailing',
+        data: {
+            subscriber: $('#subscriber').val(),
+            letter: $('#letter').val(),
+            send_date: $('#send_date').val(),
+            csrfmiddlewaretoken: $('input[name=csrfmiddlewaretoken]').val()
+        },
+        success: function (data) {
+        $("#h5").html(data);
+           }
+           })
+           })
+
+
+  </script>
+    </div>
+  </div>
+</div>
+    {% if mailings %}
+        {% for mailing in mailings %}
+            <div class="alert alert-warning mt-2">
+
+            <h6>№ {{mailing.id }}&emsp;{{mailing.subscriber_id }}&emsp;Номер шаблона№{{mailing.letter_id }}&emsp;
+                Дата отправки:{{mailing.send_date}}&emsp;Прочитано:{{mailing.read }}</h6>
+            </div>
+        {% endfor %}
+    {% else %}
+    <p>Рассылок в базе нет</p>
+    {%endif%}
+
+{% endblock %}

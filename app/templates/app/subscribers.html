@@ -1,0 +1,100 @@
+{% extends 'app/base.html' %}
+
+{% block title %}
+Список подписчиков
+{% endblock %}
+
+{% block content %}
+<h1>Подписчики</h1>
+    <!-- Кнопка-триггер модального окна -->
+<button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
+  Добавить подписчика
+</button>
+
+<!-- Модальное окно -->
+<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Анкета подписчика</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Закрыть"></button>
+      </div>
+      <div class="modal-body">
+
+          <h3>Добавление подписчиков</h3>
+          <h5 id="h5" style="color: crimson"></h5>
+
+<form method="post" id="post-form">
+    {% csrf_token %}
+    {{ subscribersform.email}}<br>
+    {{ subscribersform.name }}<br>
+    {{ subscribersform.surname }}<br>
+    {{ subscribersform.birthday }}<br>
+{#    <input type="email" placeholder="Введите email" class="form-control">#}
+{#    <input type="text" placeholder="Введите Имя" class="form-control">#}
+{#    <input type="text" placeholder="Введите Фамилию" class="form-control">#}
+{#    <input type="date"  class="form-control">#}
+    <button type="submit" class="btn btn-success">Добавить</button>
+
+
+
+
+</form>
+  </div>
+         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+  <script type="text/javascript">
+{#      $(document).ready(function () {#}
+{#      $("post-form").bind("submit",#}
+{#      $.ajax ({#}
+{#          url:'/validate_email',#}
+{#          type: "POST",#}
+{#          data: ({email: $("#email").val()}),#}
+{#          dataType: "html",#}
+{#          success: function (data) {#}
+{#          if(response.is_taken == true)#}
+{#          $("#email").text ("Такой email уже существует");#}
+{#      )};#}
+{#      });#}
+{##}
+{##}
+{##}
+{#    }),#}
+
+    $(document).on('submit', '#post-form', function (e) {
+    e.preventDefault();
+    $.ajax({
+        type: 'POST',
+        url: '/validate_email',
+        data: {
+            email: $('#email').val(),
+            name: $('#name').val(),
+            surname: $('#surname').val(),
+            birthday: $('#birthday').val(),
+            csrfmiddlewaretoken: $('input[name=csrfmiddlewaretoken]').val()
+        },
+        success: function (data) {
+        $("#h5").html(data);
+           }
+           })
+           })
+
+
+  </script>
+
+
+    </div>
+  </div>
+</div>
+    {% if subscribers %}
+        {% for subscriber in subscribers %}
+            <div class="alert alert-warning mt-2">
+            <h6> {{subscriber.email }} {{subscriber.name }} {{subscriber.surname}} {{subscriber.birthday }}</h6>
+            </div>
+        {% endfor %}
+    {% else %}
+    <p>Подписчиков в базе нет</p>
+    {%endif%}
+
+{% endblock %}
+

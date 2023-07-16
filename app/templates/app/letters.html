@@ -1,0 +1,60 @@
+{% extends 'app/base.html' %}
+
+{% block title %}
+    <h1>Шаблоны писем</h1>
+{% endblock %}
+
+
+
+{% block content %}
+<h1>Шаблоны писем</h1>
+ <!-- Кнопка-триггер модального окна -->
+<button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
+  Добавить шаблон письма
+</button>
+
+<!-- Модальное окно -->
+<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Шаблон письма</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Закрыть"></button>
+      </div>
+      <div class="modal-body">
+
+          <h3>Добавление шаблона</h3>
+          <h5 id="h5" style="color: crimson"></h5>
+<form method="post">
+    {% csrf_token %}
+    {{ patternsform.title}}<br>
+    {{ patternsform.text }}<br>
+
+
+
+{#    <input type="email" placeholder="Введите email" class="form-control">#}
+{#    <input type="text" placeholder="Введите Имя" class="form-control">#}
+{#    <input type="text" placeholder="Введите Фамилию" class="form-control">#}
+{#    <input type="date"  class="form-control">#}
+    <span> {{ error }} </span>
+    <button type="submit" class="btn btn-success">Добавить</button>
+
+</form>
+  </div>
+
+    </div>
+  </div>
+</div>
+  {% if letters %}
+        {% for letter in letters %}
+            <div class="alert alert-warning mt-2">
+            <h6>Шаблон № {{ letter.id }}</h6><br>
+            <h6>Тема письма: {{ letter.title }}</h6>
+            {{ letter.text|safe }}
+            </div>
+
+        {% endfor %}
+    {% else %}
+    <p>Шаблонов в базе нет</p>
+    {%endif%}
+{% endblock %}
