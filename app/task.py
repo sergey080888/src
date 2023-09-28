@@ -26,7 +26,7 @@ def send_mail_task(email, mailing_id, letter_id):
     )
     # return HttpResponse(mailings_text)
     msg = EmailMultiAlternatives(
-        subject="test", body=mailings_text, from_email=EMAIL_HOST_USER, to=(email,)
+        subject="test", body=mailings_text, from_email=EMAIL_HOST_USER, to=(email),
     )
     msg.attach_alternative(mailings_text, "text/html")
     msg.send()
